@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { PinchZoom } from '../lib/index.ts'
+// import { PinchZoom } from '../dist'
 </script>
 
 <template>

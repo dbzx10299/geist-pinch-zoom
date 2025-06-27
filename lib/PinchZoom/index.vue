@@ -1,13 +1,12 @@
 <script setup lang="ts">
 import {
   ref,
-  computed,
   nextTick,
   onMounted,
   onUnmounted,
   watch,
-  watchEffect,
 } from 'vue'
+
 import {
   negate,
   getPinchLength,
@@ -19,9 +18,13 @@ import {
   getFitScale,
   getBaseScale,
   isSameTransform,
-  areDimensionsEqual,
   getRelativeCoords,
 } from './utils'
+
+import type {
+  Transform,
+  Origin
+} from './types'
 
 const {
   initialScale = 'auto',
@@ -55,15 +58,15 @@ const imageDims = ref({
   height: 0
 })
 
-const imageRef = ref(null)
-const containerRef = ref(null)
-const animation = ref(null)
-const lastPanPointerPosition = ref(null)
-const lastPinchLength = ref(null)
-const lastTouchWasTwo = ref(null)
-const lastPointerUpTimeStamp = ref(null)
-const zoomViewportWidth = ref(0)
-const zoomViewport = ref(null)
+const imageRef = ref<HTMLElement | null>(null)
+const containerRef = ref<HTMLElement | null>(null)
+const animation = ref<number | null>(null)
+const lastPanPointerPosition = ref<{x: number; y: number;} | null>(null)
+const lastPinchLength = ref<number | null>(null)
+const lastTouchWasTwo = ref<boolean>(false)
+const lastPointerUpTimeStamp = ref<number | null>(null)
+const zoomViewportWidth = ref<number>(0)
+const zoomViewport = ref<HTMLElement | null>(null)
 /**
  * 
  * inverse aspect ratio = 1 / aspectRatio
@@ -89,8 +92,10 @@ onMounted(async () => {
 onUnmounted(() => cancelAnimation())
 
 watch([transformStyles, lastPinchLength], () => {
-  imageRef.value.style.width = `${containerDims.value.width * transformStyles.value.scale}px`
-  imageRef.value.style.height = `${containerDims.value.height * transformStyles.value.scale}px`
+  if (imageRef.value) {
+    imageRef.value.style.width = `${containerDims.value.width * transformStyles.value.scale}px`
+    imageRef.value.style.height = `${containerDims.value.height * transformStyles.value.scale}px`
+  }
 
   onZoomChange?.(transformStyles.value.scale)
 })
@@ -101,15 +106,15 @@ function cancelAnimation() {
 }
 
 
-function pointerDown(event) {
+function pointerDown(event: Touch) {
   lastPanPointerPosition.value = getRelativeCoords(
     event,
-    imageRef.value.parentNode,
+    imageRef.value?.parentNode as HTMLElement,
   );
 }
 
 
-function pan(event) {
+function pan(event: Touch) {
   if (!lastPanPointerPosition.value) {
     pointerDown(event)
     return
@@ -117,7 +122,7 @@ function pan(event) {
 
   const currentPointerPosition = getRelativeCoords(
     event,
-    imageRef.value.parentNode
+    imageRef.value?.parentNode as HTMLElement
   )
 
   const deltaX = currentPointerPosition.x - lastPanPointerPosition.value.x
@@ -182,7 +187,7 @@ function applyInitialTransform(lerpFactor = 0) {
 }
 
 
-function constrainAndApplyTransform(top, left, scale, zoomTolerance, lerpFactor = 0) {
+function constrainAndApplyTransform(top: number, left: number, scale: number, zoomTolerance: number, lerpFactor: number = 0) {
   const transform = {
     top,
     left,
@@ -198,27 +203,27 @@ function constrainAndApplyTransform(top, left, scale, zoomTolerance, lerpFactor 
 
 
 
-function applyTransform(transforms, lerpFactor) {
+function applyTransform(transform: Transform, lerpFactor: number) {
   if (lerpFactor > 0) {
     const animate = () => {
-      const deltaTop = transforms.top - transformStyles.value.top
-      const deltaLeft = transforms.left - transformStyles.value.left
-      const deltaScale = transforms.scale - transformStyles.value.scale
+      const deltaTop = transform.top - transformStyles.value.top
+      const deltaLeft = transform.left - transformStyles.value.left
+      const deltaScale = transform.scale - transformStyles.value.scale
 
       const nextTransform = {
         top: snapToTarget(
           transformStyles.value.top + lerpFactor * deltaTop,
-          transforms.top,
+          transform.top,
           1
         ),
         left: snapToTarget(
           transformStyles.value.left + lerpFactor * deltaLeft,
-          transforms.left,
+          transform.left,
           1
         ),
         scale: snapToTarget(
           transformStyles.value.scale + lerpFactor * deltaScale,
-          transforms.scale,
+          transform.scale,
           0.001
         )
       }
@@ -227,21 +232,21 @@ function applyTransform(transforms, lerpFactor) {
         transformStyles.value = nextTransform
         animation.value = requestAnimationFrame(animate)
       } else {
-        transformStyles.value = transforms
+        transformStyles.value = transform
       }
     }
 
     animation.value = requestAnimationFrame(animate)
   } else {
-    transformStyles.value.top = transforms.top
-    transformStyles.value.left = transforms.left
-    transformStyles.value.scale = transforms.scale
+    transformStyles.value.top = transform.top
+    transformStyles.value.left = transform.left
+    transformStyles.value.scale = transform.scale
   }
 }
 
 
 
-function getCorrectedTransform(transformStyles, zoomTolerance) {
+function getCorrectedTransform(transformStyles: Transform, zoomTolerance: number) {
   const constrainedScale = getConstrainedScale(transformStyles.scale, zoomTolerance)
   const negativeSpace = calculateNegativeSpace(constrainedScale)
 
@@ -277,7 +282,7 @@ function getCorrectedTransform(transformStyles, zoomTolerance) {
 
 
 
-function getConstrainedScale(targetScale, zoomTolerance) {
+function getConstrainedScale(targetScale: number, zoomTolerance: number) {
   const minScaleFactor = 1 - zoomTolerance
   const maxScaleFactor = 1 + zoomTolerance
 
@@ -290,7 +295,7 @@ function getConstrainedScale(targetScale, zoomTolerance) {
 
 
 
-function calculateNegativeSpace(constrainedScale) {
+function calculateNegativeSpace(constrainedScale: number) {
   return {
     width: containerDims.value.width - constrainedScale * imageDims.value.width,
     height: containerDims.value.height - constrainedScale * imageDims.value.height
@@ -299,7 +304,7 @@ function calculateNegativeSpace(constrainedScale) {
 
 
 
-function doubleClick(origin) {
+function doubleClick(origin: Origin) {
   1.5 * transformStyles.value.scale <= maxScale
     ? zoomIn(origin, zoomTolerance, 0.3)
     : applyInitialTransform(0.3)
@@ -307,7 +312,7 @@ function doubleClick(origin) {
 
 
 
-function zoomIn(origin, zoomTolerance = 0.1, lerpFactor = 0) {
+function zoomIn(origin: Origin, zoomTolerance = 0.1, lerpFactor = 0) {
   const zoomOrigin = origin || {
     x: containerDims.value.width / 2,
     y: containerDims.value.height / 2,
@@ -323,18 +328,7 @@ function zoomIn(origin, zoomTolerance = 0.1, lerpFactor = 0) {
 
 
 
-function zoomOut(origin, t = 0) {
-  const zoomOrigin = origin || {
-    x: containerDims.value.width / 2,
-    y: containerDims.value.height / 2
-  }
-
-  zoom(0.9 * transformStyles.value.scale, zoomOrigin, t)
-}
-
-
-
-function zoom(targetScale, origin, zoomTolerance, lerpFactor = 0) {
+function zoom(targetScale: number, origin: Origin, zoomTolerance: number, lerpFactor: number = 0) {
   const { top, left, scale } = transformStyles.value
 
   const offsetY = origin.y - top
@@ -359,7 +353,7 @@ function zoom(targetScale, origin, zoomTolerance, lerpFactor = 0) {
 
 
 
-function pinchChange(e) {
+function pinchChange(e: TouchList) {
   const pinchLength = getPinchLength(e)
   const pinchCenter = getPinchCenter(e)
 
@@ -374,7 +368,7 @@ function pinchChange(e) {
 
 
 
-function handleTouchStart(event) {
+function handleTouchStart(event: TouchEvent) {
   cancelAnimation()
   const touches = event.touches
 
@@ -392,7 +386,7 @@ function handleTouchStart(event) {
 
 
 
-function handleTouchMove(event) {
+function handleTouchMove(event: TouchEvent) {
   const touches = event.touches
 
   if (touches.length === 2) {
@@ -402,40 +396,40 @@ function handleTouchMove(event) {
   }
 
   if (touches.length === 1) {
-    const { up, down, left, right } = pan(touches[0]) ?? {};
+    pan(touches[0])
     lastTouchWasTwo.value = true;
   }
 }
 
 
 
-function handleTouchEnd(e) {
+function handleTouchEnd(event: TouchEvent) {
   cancelAnimation()
 
-  if (e.touches.length === 0 && e.changedTouches.length === 1) {
+  if (event.touches.length === 0 && event.changedTouches.length === 1) {
     if (
       lastPointerUpTimeStamp.value &&
-      lastPointerUpTimeStamp.value + 250 > e.timeStamp
+      lastPointerUpTimeStamp.value + 250 > event.timeStamp
     ) {
       const touchCoords = getRelativeCoords(
-        e.changedTouches[0],
-        imageRef.value.parentNode,
-      );
+        event.changedTouches[0],
+        imageRef.value?.parentNode as HTMLElement
+      )
 
-      doubleClick(touchCoords);
+      doubleClick(touchCoords)
     }
 
     lastTouchWasTwo.value = false
-    lastPointerUpTimeStamp.value = e.timeStamp
-    preventDefaultIfCancelable(e)
+    lastPointerUpTimeStamp.value = event.timeStamp
+    preventDefaultIfCancelable(event)
   }
 }
 </script>
 
 <template>
-  <div style="position: fixed; left: 0; top: 0; display: flex; height: 100%; width: 100%; justify-content: center; z-index: 999;">
-    <div style="z-index: 999; align-items: center; position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; outline: none;">
-      <div style="margin: 0; padding: 0; display: flex; flex-direction: column; height: 100%; transform: translateZ(0); overflow-x: hidden; overflow-y: scroll;">
+  <!-- <div style="position: fixed; left: 0; top: 0; display: flex; height: 100%; width: 100%; justify-content: center; z-index: 999;"> -->
+    <!-- <div style="z-index: 999; align-items: center; position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; outline: none;"> -->
+      <!-- <div style="margin: 0; padding: 0; display: flex; flex-direction: column; height: 100%; transform: translateZ(0); overflow-x: hidden; overflow-y: scroll;"> -->
         <div
           style="margin: 0 auto; position: relative; height: 100%;"
           ref="zoomViewport"
@@ -485,12 +479,12 @@ function handleTouchEnd(e) {
             </div>
           </div>
         </div>
-      </div>
+      <!-- </div> -->
 
-      <div>
+      <!-- <div>
         <div style="background: white; margin-top: auto; height: 72px;"></div>
-      </div>
+      </div> -->
 
-    </div>
-  </div>
+    <!-- </div> -->
+  <!-- </div> -->
 </template>

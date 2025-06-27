@@ -1,11 +1,16 @@
-const negate = (e) => -1 * e;
+import type {
+  Transform,
+  ContainerDims
+} from './types'
 
-const getPinchLength = (touches) => {
+const negate = (num: number) => -1 * num
+
+const getPinchLength = (touches: TouchList) => {
   const [t1, t2] = touches
   return Math.hypot(t1.clientX - t2.clientX, t1.clientY - t2.clientY)
 }
 
-const getPinchCenter = (touches) => {
+const getPinchCenter = (touches: TouchList) => {
   const touch1 = touches[0]
   const touch2 = touches[1]
 
@@ -15,54 +20,53 @@ const getPinchCenter = (touches) => {
   }
 }
 
-const getElementDimensions = (element) => ({
+const getElementDimensions = (element: HTMLElement) => ({
   width: element.offsetWidth,
   height: element.offsetHeight,
 });
 
-const snapToTarget = (current, target, threshold) => {
+const snapToTarget = (current: number, target: number, threshold: number) => {
   return Math.abs(target - current) < threshold ? target : current
 };
 
 
-function clamp(min, max, value) {
+function clamp(min: number, max: number, value: number) {
   return Math.min(max, Math.max(min, value))
 }
 
-const preventDefaultIfCancelable = (event) => {
+const preventDefaultIfCancelable = (event: TouchEvent) => {
   if (event.cancelable !== false) {
     event.preventDefault()
   }
 };
 
-const getFitScale = (imageDims, containerDims) => {
+const getFitScale = (imageDims: ContainerDims, containerDims: ContainerDims) => {
   const { width: imageWidth, height: imageHeight } = imageDims
   const { width: containerWidth, height: containerHeight } = containerDims
+
   return imageWidth > 0 && imageHeight > 0
     ? Math.min(containerWidth / imageWidth, containerHeight / imageHeight, 1)
     : 1
 }
 
-const getBaseScale = (imageDims, containerDims, minScale) =>
-  typeof minScale === 'string'
+const getBaseScale = (imageDims: ContainerDims, containerDims: ContainerDims, minScale: string | number) => {
+  return typeof minScale === 'string'
     ? getFitScale(imageDims, containerDims)
     : minScale || 1
+}
 
 
-const isSameTransform = (e, t) => {
-  if (e === undefined || t === undefined) return e === t
+const isSameTransform = (correctedTransform: Transform, currentTransform: Transform) => {
+  if (correctedTransform === undefined || currentTransform === undefined) return correctedTransform === currentTransform
 
   return (
-    Math.round(e.top) === Math.round(t.top) &&
-    Math.round(e.left) === Math.round(t.left) &&
-    Math.round(e.scale) === Math.round(t.scale)
+    Math.round(correctedTransform.top) === Math.round(currentTransform.top) &&
+    Math.round(correctedTransform.left) === Math.round(currentTransform.left) &&
+    Math.round(correctedTransform.scale) === Math.round(currentTransform.scale)
   )
 }
 
-const areDimensionsEqual = (a, b) =>
-  !!a && !!b && a.width === b.width && a.height === b.height
-
-const getRelativeCoords = (event, el) => {
+const getRelativeCoords = (event: Touch, el: HTMLElement) => {
   const { clientX, clientY } = event
   const { left, top } = el.getBoundingClientRect()
   return {
@@ -83,6 +87,5 @@ export {
   getFitScale,
   getBaseScale,
   isSameTransform,
-  areDimensionsEqual,
   getRelativeCoords,
 } 

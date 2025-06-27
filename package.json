@@ -1,8 +1,17 @@
 {
   "name": "geist-pinch-zoom",
   "version": "0.0.0",
+  "description": "An opinionated pinch zoom component for Vue",
   "type": "module",
   "license": "MIT",
+  "homepage": "https://github.com/dbzx10299/geist-pinch-zoom#readme",
+  "bugs": {
+    "url": "https://github.com/dbzx10299/geist-pinch-zoom/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dbzx10299/geist-pinch-zoom.git"
+  },
   "author": "David Bender <https://github.com/dbzx10299>",
   "files": [
     "dist"
@@ -27,12 +36,18 @@
     "@types/node": "^24.0.5",
     "@vitejs/plugin-vue": "^5.2.3",
     "@vue/tsconfig": "^0.7.0",
+    "shiki": "^3.7.0",
     "typescript": "~5.8.3",
     "vite": "^6.3.5",
     "vite-plugin-dts": "^4.5.4",
+    "vitepress": "^1.6.3",
     "vue-tsc": "^2.2.8"
   },
   "peerDependencies": {
     "vue": "^3.5.0"
+  },
+  "dependencies": {
+    "@tailwindcss/vite": "^4.1.11",
+    "tailwindcss": "^4.1.11"
   }
 }

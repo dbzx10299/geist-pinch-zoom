@@ -1,5 +1,33 @@
-# Vue 3 + TypeScript + Vite
+# Geist Pinch Zoom
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+An opinionated pinch zoom component for Vue.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Install
+
+```bash
+npm i geist-pinch-zoom
+```
+
+## Usage
+
+```vue
+<script setup lang="ts">
+import { PinchZoom } from 'geist-pinch-zoom'
+</script>
+
+<template>
+  <PinchZoom
+    initialScale="auto"
+    minScale="auto"
+    :maxScale="3"
+    :zoomTolerance="0.3"
+    :aspectRatio="0.693"
+  >
+    <img src="/image.webp"/>
+  </PinchZoom>
+</template>
+```
+
+## Licenses
+
+This project is licensed under the [MIT License](LICENSE).
