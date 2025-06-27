@@ -1,0 +1,1 @@
+export { default as PinchZoom } from './PinchZoom/index.vue'
