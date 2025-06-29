@@ -69,17 +69,13 @@ function handleClose() {
 }
 
 .geist-dialog {
-  z-index: 1000;
+  z-index: 999;
   position: fixed;
   inset: 0;
   height: 100%;
   width: 100%;
   display: flex;
   flex-direction: column;
-}
-
-.geist-dialog {
-  z-index: 999;
 }
 
 .geist-dialog_inner {
@@ -92,17 +88,13 @@ function handleClose() {
   z-index: 1000;
 }
 
-.geist-pinch-zoom .geist-dialog_inner {
-  background: #f3f3f3;
-}
-
 :slotted(.geist-close_btn) {
   position: absolute;
   top: 0;
   right: 0;
   min-width: 20px;
   min-height: 20px;
-  margin: 12px;
+  margin: 16px;
   display: flex;
   align-items: center;
   justify-content: center;

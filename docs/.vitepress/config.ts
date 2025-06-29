@@ -10,7 +10,7 @@ const cssVarsTheme = createCssVariablesTheme({
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
-  title: "Geist Pinch Zoom",
+  title: "Pinch Zoom",
   description: "An opinionated pinch zoom component for Vue.",
   markdown: {
     theme: cssVarsTheme,
@@ -18,14 +18,13 @@ export default defineConfig({
   cleanUrls: true,
   appearance: 'force-dark',
   themeConfig: {
-    logo: '/site-logo.svg',
     editLink: {
       pattern: 'https://github.com/dbzx10299/geist-pinch-zoom/edit/main/docs/:path',
       text: 'Suggest changes to this page',
     },
     nav: [
-      // { text: 'API', link: '/api' },
-      { text: 'Docs', link: '/getting-started' }
+      { text: 'Docs', link: '/getting-started' },
+      { text: 'API', link: '/api' },
     ],
     sidebar: [
       {
@@ -35,18 +34,6 @@ export default defineConfig({
           { text: 'API', link: '/api' }
         ]
       },
-      // {
-      //   text: 'Drawer',
-      //   items: [
-      //     { text: 'Examples', link: '/examples' }
-      //   ]
-      // },
-      // {
-      //   text: 'Minimal Drawer',
-      //   items: [
-      //     { text: 'Geist Vaul', link: '/geist-vaul' }
-      //   ]
-      // }
     ],
     socialLinks: [
       { icon: 'github', link: 'https://github.com/dbzx10299/geist-pinch-zoom' },

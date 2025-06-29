@@ -113,7 +113,6 @@ function pointerDown(event: Touch) {
   );
 }
 
-
 function pan(event: Touch) {
   if (!lastPanPointerPosition.value) {
     pointerDown(event)
@@ -431,9 +430,11 @@ function handleTouchEnd(event: TouchEvent) {
     <!-- <div style="z-index: 999; align-items: center; position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; outline: none;"> -->
       <!-- <div style="margin: 0; padding: 0; display: flex; flex-direction: column; height: 100%; transform: translateZ(0); overflow-x: hidden; overflow-y: scroll;"> -->
         <div
-          style="margin: 0 auto; position: relative; height: 100%;"
           ref="zoomViewport"
           :style="{
+            margin: '0 auto',
+            position: 'relative',
+            height: '100%',
             '--ratio-portrait': aspectRatio,
             ...(zoomViewportWidth > 0 && {
               width: `${zoomViewportWidth}px`

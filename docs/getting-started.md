@@ -57,7 +57,9 @@ Geist Pinch Zoom is a lightweight, performant, and simple pinch zoom component f
 npm i geist-pinch-zoom
 ```
 
-## Create a Drawer component
+## Create a Pinch Zoom component
+
+In order to get the zoom viewport setup correctly, there is only one required prop `aspectRatio`. Simply divide the image `width` by `height` to get the correct aspect ratio.
 
 ```vue
 <script setup lang="ts">
@@ -94,15 +96,17 @@ import { PinchZoom } from 'geist-pinch-zoom'
 
 ## Examples
 
-
-The most basic setup for a drawer.
-
 <CodePreview
   lang="vue"
   :code
 >
   <template #preview>
-    <button class="btn" @click="showModal = !showModal">open zoom</button>
+    <button
+      class="btn"
+      @click="showModal = !showModal"
+    >
+      open zoom
+    </button>
     <Teleport to="body">
       <GeistModal
         v-if="showModal"
@@ -141,3 +145,19 @@ The most basic setup for a drawer.
     </Teleport>
   </template>
 </CodePreview>
+
+## API Reference
+
+```ts
+interface PinchZoomProps {
+  /**
+   * how much the image should zoom on each double tap.
+   */
+  zoomTolerance?: number;
+  initialScale?: 'auto' | number;
+  minScale?: 'auto' | number;
+  maxScale?: number;
+  aspectRatio: number;
+  onZoomChange?: (scale: number) => void;
+}
+```

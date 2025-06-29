@@ -13,7 +13,7 @@ import { PinchZoom } from '../lib/index.ts'
   >
     <img
       srcset=""
-      src="/shoes.webp"
+      src="/shoes2.webp"
       style="position: relative; width: 100%; display: block; height: auto; max-width: 100%; text-align: center;"
     />
   </PinchZoom>
