@@ -141,7 +141,7 @@ a {
 
 @media (hover: hover) {
   .vp-doc a:hover {
-    color: #00ffd0;
+    color: var(--vp-c-brand-2);
   }
 }
 
