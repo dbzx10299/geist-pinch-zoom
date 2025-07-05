@@ -1,7 +1,7 @@
 {
   "name": "geist-pinch-zoom",
   "version": "0.0.0",
-  "description": "An opinionated pinch zoom component for Vue",
+  "description": "A pinch zoom component for Vue",
   "type": "module",
   "license": "MIT",
   "homepage": "https://github.com/dbzx10299/geist-pinch-zoom#readme",

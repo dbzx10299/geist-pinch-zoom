@@ -1,6 +1,6 @@
 # Geist Pinch Zoom
 
-An opinionated pinch zoom component for Vue.
+A pinch zoom component for Vue.
 
 ## Install
 
