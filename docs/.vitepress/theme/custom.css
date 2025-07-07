@@ -80,9 +80,15 @@
   --shiki-token-link: #00ca50;
 }
 
+.vp-doc [class*='language-'] code .highlighted {
+  margin: 0;
+  background: #002f62;
+  padding: 0 20px;
+}
+
 .highlighted {
-  /* background: #0f2f57; */
-  background: rgb(78 172 154 / 10%);
+  background: #002f62;
+  /* background: rgb(78 172 154 / 10%); */
 }
 
 .highlighted::after {
@@ -92,13 +98,13 @@
   bottom: 0;
   width: 2px;
   left: 0;
-  /* background: #52a8ff; */
-  background: rgb(0 215 175 / 68%);
+  background: #52a8ff;
+  /* background: rgb(0 215 175 / 68%); */
 }
 
 ::selection {
-  color: hsl(172.46 66.01% 50.39%);
-  background: hsl(178.6 84.31% 10%);
+  color: #fff;
+  background: #005be7;
 }
 
 a:hover, a:visited, a:link, a:active {
@@ -111,7 +117,7 @@ a {
 }
 
 .vp-doc [class*='language-'] code .highlighted::after {
-  background: #00d7afad;
+  background: #52a8ff;
   bottom: 0;
   content: "";
   left: 0;
