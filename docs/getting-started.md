@@ -13,7 +13,7 @@ import { PinchZoom } from 'geist-pinch-zoom'
 
 <template>
   <GeistModal v-if="showModal">
-    <template #content="{ onHandleClose }">
+    <template #content">
       <div
         :style="{
           alignItems: 'center',
@@ -43,47 +43,6 @@ import { PinchZoom } from 'geist-pinch-zoom'
             }"
           />
         </PinchZoom>
-        <div style="width: 100%;">
-          <div
-            :style="{
-              background: 'white',
-              marginTop: 'auto',
-              height: '72px',
-              padding: '16px',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'flex-end'
-            }"
-          >
-            <button
-              @click="onHandleClose"
-              :style="{
-                display: 'inline-block',
-                color: '#000',
-                padding: '8px'
-              }"
-            >
-              <span
-                :style="{
-                  position: 'relative',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  textAlign: 'center'
-                }"
-              >
-                <CloseIcon
-                  :style="{
-                    flexShrink: 0,
-                    height: '24px',
-                    width: '24px',
-                    display: 'inline-block'
-                  }"
-                />
-              </span>
-            </button>
-          </div>
-        </div>
       </div>
     </template>
   </GeistModal>
@@ -165,6 +124,11 @@ import { PinchZoom } from 'geist-pinch-zoom'
           showModal = false
         }"
       >
+        <template #closeButton="{ onClick }">
+          <button class="geist-close_btn" style="color: #000; z-index: 9999; height: 24px; width: 24px;" @click="onClick">
+            <CloseIcon />
+          </button>
+        </template>
         <template #content="{ onHandleClose }">
           <div
             :style="{
@@ -195,13 +159,6 @@ import { PinchZoom } from 'geist-pinch-zoom'
                 }"
               />
             </PinchZoom>
-              <div style="width: 100%; background: white; margin-top: auto; height: 72px; padding: 16px; display: flex; align-items: center; justify-content: flex-end;">
-                  <button style="display: inline-block; color: #000; padding: 8px;" @click="onHandleClose">
-                    <span style="position: relative; display: flex; align-items: center; justify-content: center; text-align: center;">
-                      <CloseIcon style="flex-shrink: 0; height: 24px; width: 24px; display: inline-block;"/>
-                    </span>
-                  </button>
-              </div>
           </div>
         </template>
       </GeistModal>
