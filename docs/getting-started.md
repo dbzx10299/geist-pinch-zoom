@@ -145,7 +145,7 @@ import { PinchZoom } from 'geist-pinch-zoom'
               minScale="auto"
               :maxScale="3"
               :zoomTolerance="0.3"
-              :aspectRatio="0.693"
+              :aspectRatio="0.6923"
             >
               <img
                 src="/shoes2.webp"
