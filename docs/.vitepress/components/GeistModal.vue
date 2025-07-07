@@ -82,6 +82,7 @@ function handleClose() {
   position: absolute;
   display: flex;
   flex-direction: column;
+  justify-content: center;
   border: none;
   background: #fff;
   inset: 0;
