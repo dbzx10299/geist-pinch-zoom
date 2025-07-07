@@ -3,7 +3,15 @@ import { ref, onMounted } from 'vue'
 import { codeToHtml, addClassToHast } from 'shiki'
 import { createCssVariablesTheme } from 'shiki/core'
 
-const { code, lang, highlights } = defineProps<{code?: string; lang?: string, highlights?: number[] }>()
+const {
+  code,
+  lang,
+  highlights
+} = defineProps<{
+  code?: string;
+  lang?: string;
+  highlights?: number[]
+}>()
 
 const cssVarsTheme = createCssVariablesTheme({ 
   name: 'css-variables',
