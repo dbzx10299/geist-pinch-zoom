@@ -426,66 +426,76 @@ function handleTouchEnd(event: TouchEvent) {
 </script>
 
 <template>
-  <!-- <div style="position: fixed; left: 0; top: 0; display: flex; height: 100%; width: 100%; justify-content: center; z-index: 999;"> -->
-    <!-- <div style="z-index: 999; align-items: center; position: relative; height: 100%; width: 100%; display: flex; flex-direction: column; outline: none;"> -->
-      <!-- <div style="margin: 0; padding: 0; display: flex; flex-direction: column; height: 100%; transform: translateZ(0); overflow-x: hidden; overflow-y: scroll;"> -->
+  <div
+    :style="{
+      margin: 0,
+      padding: 0,
+      display: 'flex',
+      flexDirection: 'column',
+      height: '100%',
+      transform: 'translateZ(0)',
+      overflowX: 'hidden',
+      overflowY: 'scroll'
+    }"
+  >
+    <div
+      ref="zoomViewport"
+      :style="{
+        margin: '0 auto',
+        position: 'relative',
+        height: '100%',
+        '--ratio-portrait': aspectRatio,
+        ...(zoomViewportWidth > 0 && {
+          width: `${zoomViewportWidth}px`
+        })
+      }"
+    >
+      <div
+        ref="containerRef"
+        :style="{
+          overflow: 'hidden',
+          touchAction: 'none',
+          width: '100%',
+          height: 'initial',
+          ...(containerDims.height > 0 && containerDims.width > 0 && {
+            width: `${containerDims.width}px`,
+            height: `${containerDims.height}px`
+          })
+        }"
+      >
         <div
-          ref="zoomViewport"
+          @touchstart="handleTouchStart"
+          @touchmove="handleTouchMove"
+          @touchend="handleTouchEnd"
+          ref="imageRef"
           :style="{
-            margin: '0 auto',
+            cursor: 'pointer',
+            userSelect: 'none',
+            willChange: 'width, height, transform',
+            backfaceVisibility: 'hidden',
+            width: `${containerDims.width * transformStyles.scale}px`,
+            height: `${containerDims.height * transformStyles.scale}px`,
+            transform: `translate3d(${transformStyles.left}px, ${transformStyles.top}px, 0)`,
+            transformOrigin: '0px 0px',
             position: 'relative',
-            height: '100%',
-            '--ratio-portrait': aspectRatio,
-            ...(zoomViewportWidth > 0 && {
-              width: `${zoomViewportWidth}px`
-            })
+            background: 'transparent',
+            overflow: 'hidden',
+            paddingTop: 'calc(1 / var(--ratio-portrait) * 100%)',
           }"
         >
           <div
-            ref="containerRef"
             :style="{
-              overflow: 'hidden',
-              touchAction: 'none',
+              left: 0,
+              top: 0,
               width: '100%',
-              height: 'initial',
-              ...(containerDims.height > 0 && containerDims.width > 0 && {
-                  width: `${containerDims.width}px`,
-                  height: `${containerDims.height}px`
-              })
+              position: 'absolute',
+              height: '100%'
             }"
           >
-            <div
-              @touchstart="handleTouchStart"
-              @touchmove="handleTouchMove"
-              @touchend="handleTouchEnd"
-              ref="imageRef"
-              :style="{
-                cursor: 'pointer',
-                userSelect: 'none',
-                willChange: 'width, height, transform',
-                backfaceVisibility: 'hidden',
-                width: `${containerDims.width * transformStyles.scale}px`,
-                height: `${containerDims.height * transformStyles.scale}px`,
-                transform: `translate3d(${transformStyles.left}px, ${transformStyles.top}px, 0)`,
-                transformOrigin: '0px 0px',
-                position: 'relative',
-                background: 'transparent',
-                overflow: 'hidden',
-                paddingTop: 'calc(1 / var(--ratio-portrait) * 100%)',
-              }"
-            >
-              <div style="left: 0; top: 0; width: 100%; position: absolute; height: 100%;">
-                <slot/>
-              </div>
-            </div>
+            <slot/>
           </div>
         </div>
-      <!-- </div> -->
-
-      <!-- <div>
-        <div style="background: white; margin-top: auto; height: 72px;"></div>
-      </div> -->
-
-    <!-- </div> -->
-  <!-- </div> -->
+      </div>
+    </div>
+  </div>
 </template>
