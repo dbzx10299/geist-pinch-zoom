@@ -49,7 +49,7 @@ export default defineConfig({
     ['link', { rel: 'icon', href: '/favicon.ico' }],
     ['meta', { name: 'author', content: 'David Bender' }],
     ['meta', { property: 'og:title', content: 'Geist Pinch Zoom' }],
-    ['meta', { property: 'og:description', content: 'Geist Pinch Zoom: An opinionated pinch zoom component for Vue.' }],
+    ['meta', { property: 'og:description', content: 'Geist Pinch Zoom: A pinch zoom component for Vue.' }],
     ['meta', { property: 'og:image', content: '/og-image.jpg' }],
     ['meta', { name: 'twitter:card', content: 'summary_large_image' }],
     ['meta', { name: 'viewport', content: 'width=device-width, initial-scale=1.0, viewport-fit=cover' }],
