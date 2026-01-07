@@ -297,10 +297,11 @@ interface PinchZoomProps {
    * how much the image should zoom on each double tap.
    */
   zoomTolerance?: number;
+  aspectRatio: number;
   initialScale?: 'auto' | number;
   minScale?: 'auto' | number;
   maxScale?: number;
-  aspectRatio: number;
   onZoomChange?: (scale: number) => void;
+  style?: CSSProperties;
 }
 ```

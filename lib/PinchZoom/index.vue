@@ -7,6 +7,8 @@ import {
   watch,
 } from 'vue'
 
+import type { CSSProperties } from 'vue';
+
 import {
   negate,
   getPinchLength,
@@ -40,6 +42,7 @@ const {
   zoomTolerance?: number;
   aspectRatio: number;
   onZoomChange?: (scale: number) => void;
+  style?: CSSProperties
 }>()
 
 const transformStyles = ref({
@@ -489,7 +492,10 @@ function handleTouchEnd(event: TouchEvent) {
               top: 0,
               width: '100%',
               position: 'absolute',
-              height: '100%'
+              height: '100%',
+              display: 'flex',
+              justifyContent: 'center',
+              ...style
             }"
           >
             <slot/>
