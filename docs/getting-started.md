@@ -3,7 +3,7 @@ import { ref, Teleport } from 'vue'
 import CodePreview from './.vitepress/components/CodePreview.vue'
 import GeistModal from './.vitepress/components/GeistModal.vue'
 import CloseIcon from './.vitepress/components/CloseIcon.vue'
-import { PinchZoom } from '../lib'
+import { PinchZoom } from '../src'
 import Note from './.vitepress/components/Note.vue'
 
 const code = `
