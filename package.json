@@ -1,6 +1,6 @@
 {
   "name": "geist-pinch-zoom",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A pinch zoom component for Vue",
   "type": "module",
   "license": "MIT",
@@ -40,14 +40,14 @@
     "vue": "^3.0.0"
   },
   "devDependencies": {
-    "@tailwindcss/vite": "^4.2.1",
+    "@tailwindcss/vite": "^4.2.2",
     "@tsdown/css": "^0.21.4",
     "@types/node": "^25.5.0",
     "@vitejs/plugin-vue": "^6.0.5",
     "@vitest/browser-playwright": "^4.1.0",
     "bumpp": "^11.0.1",
     "playwright": "^1.58.2",
-    "tailwindcss": "^4.2.1",
+    "tailwindcss": "^4.2.2",
     "tsdown": "^0.21.3",
     "typescript": "^5.9.3",
     "unplugin-vue": "^7.1.1",
@@ -57,10 +57,5 @@
     "vitest-browser-vue": "^2.1.0",
     "vue": "^3.5.30",
     "vue-tsc": "^3.2.6"
-  },
-  "overrides": {
-    "@tailwindcss/vite": {
-      "vite": "^8.0.0"
-    }
   }
 }
